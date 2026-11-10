@@ -1,0 +1,30 @@
+name: SHSell
+version: '${project.version}'
+main: org.Cry_Legende.sHSell.SHSell
+api-version: '1.21'
+author: Cry_Legende
+description: /sell allpages et rachat des ventes récentes pour ShopGUIPlus.
+depend: [ShopGUIPlus]
+softdepend: [SHInventoryPages, SHLogs]
+
+commands:
+  rachat:
+    description: Ouvre le menu de rachat de vos ventes récentes (ou celui d'un joueur pour le staff).
+    usage: /<command> [joueur]
+    aliases: [buyback]
+    permission: shsell.buyback
+  shsell:
+    description: Administration de SHSell.
+    usage: /<command> reload
+    permission: shsell.admin
+
+permissions:
+  shsell.allpages:
+    description: /sell allpages (demande aussi shopguiplus.sell.all).
+    default: true
+  shsell.buyback:
+    description: Racheter ses propres ventes récentes.
+    default: true
+  shsell.admin:
+    description: Consulter le menu de rachat d'un joueur et recharger SHSell.
+    default: op

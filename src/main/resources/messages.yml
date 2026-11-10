@@ -1,0 +1,66 @@
+# Messages de SHSell. Couleurs : codes & et &#RRGGBB. Un message vide ("") n'est pas envoyé.
+
+# Commun
+player-only: "&7&l« &c&lSH &8&l» &7Cette commande est réservée aux &cjoueurs&7."
+no-permission: "&8&l« &f&lSH &8&l» &fCommande inconnue, essayer autre chose."
+player-unknown: "&7&l« &c&lSH &8&l» &7Le joueur &c%player% &7n'est jamais venu sur ce serveur."
+reloaded: "&7&l« &a&lSH &8&l» &7Configuration et messages &arechargés&7."
+admin-usage: "&7&l« &e&lSH &8&l» &7Utilisation : &e/%label% reload"
+
+# Sommes : %amount% (nombre formaté), %currency% (nom de la monnaie de la boutique ; DEFAULT = monnaie par défaut de
+# ShopGUIPlus, la première de economyTypes)
+price: "%amount% %currency%"
+currency-DEFAULT: "SHCoins"
+currency-VAULT: "SHCoins"
+currency-PLAYER_POINTS: "points"
+currency-EXP: "XP"
+
+# /sell allpages (%quantity% objets vendus, %price% gagné, %pages% pages parcourues, inventaire porté compris)
+sell-done: "&7&l« &a&lSH &8&l» &7Vous avez vendu &a%quantity% &7objet(s) de vos &a%pages% &7page(s) pour &a%price%&7."
+sell-nothing: "&7&l« &e&lSH &8&l» &7Aucun objet à vendre dans vos pages d'inventaire."
+sell-unavailable-here: "&7&l« &c&lSH &8&l» &7Vous ne pouvez pas &cvendre &7ici."
+sell-cooldown: "&7&l« &6&lSH &8&l» &7Patientez un instant avant de &6revendre&7."
+sell-loading: "&7&l« &e&lSH &8&l» &7Vos données de boutique sont en cours de &echargement&7, réessayez dans un instant."
+sell-error: "&7&l« &c&lSH &8&l» &7La vente a été &cinterrompue &7par une erreur, prévenez le staff."
+
+# Menu de rachat
+buyback-title: "&8Rachat &7(%page%/%max%)"
+buyback-title-other: "&8Rachat de %player% &7(%page%/%max%)"
+buyback-empty: "&7&l« &e&lSH &8&l» &7Vous n'avez &erien vendu &7récemment."
+buyback-empty-other: "&7&l« &e&lSH &8&l» &e%player% &7n'a rien vendu récemment."
+buyback-button-previous: "&a← Page précédente"
+buyback-button-next: "&aPage suivante →"
+buyback-info-name: "&eRachat"
+# %minutes% = durée pendant laquelle une vente reste rachetable
+buyback-info-lore:
+  - "&7Vos ventes au shop des &e%minutes% &7dernières"
+  - "&7minutes, rachetables au prix qu'elles"
+  - "&7vous ont rapporté."
+  - ""
+  - "&eClic &8» &7racheter une pile"
+  - "&eShift + clic &8» &7tout racheter"
+buyback-info-lore-other:
+  - "&7Ventes récentes de ce joueur."
+  - "&7Consultation seulement."
+# Lignes ajoutées sous la description d'un objet vendu : %quantity%, %price% (tout), %stack% et %stack_price%
+# (une pile), %time% (temps restant)
+buyback-entry-lore:
+  - ""
+  - "&7Vendu : &e%quantity%"
+  - "&7Racheter une pile (&e%stack%&7) : &a%stack_price%"
+  - "&7Tout racheter : &a%price%"
+  - "&7Disparaît dans : &e%time%"
+  - ""
+  - "&eClic &8» &7une pile  &8|  &eShift + clic &8» &7tout"
+buyback-entry-lore-other:
+  - ""
+  - "&7Vendu : &e%quantity% &7pour &a%price%"
+  - "&7Disparaît dans : &e%time%"
+time-hours: "%h% h %m%"
+time-minutes: "%m% min %s% s"
+buyback-done: "&7&l« &a&lSH &8&l» &7Vous avez racheté &a%quantity% %item% &7pour &a%price%&7."
+buyback-no-money: "&7&l« &c&lSH &8&l» &7Il vous faut &c%price% &7pour ce rachat."
+buyback-no-space: "&7&l« &c&lSH &8&l» &7Pas assez de place dans vos pages d'inventaire pour &c%quantity% &7objet(s)."
+buyback-economy-missing: "&7&l« &c&lSH &8&l» &7Cette monnaie n'est plus &cdisponible&7."
+buyback-error: "&7&l« &c&lSH &8&l» &7Le rachat a &céchoué&7, rien ne vous a été prélevé."
+buyback-unavailable-here: "&7&l« &c&lSH &8&l» &7Vous ne pouvez pas &cracheter &7ici."

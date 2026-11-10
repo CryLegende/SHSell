@@ -1,0 +1,65 @@
+# SHSell
+#
+# Compléments de vente pour ShopGUIPlus.
+#   /sell allpages   Vend l'inventaire porté puis chacune des autres pages d'inventaire (SHInventoryPages), comme
+#                    /sell all : mêmes prix, multiplicateurs, journal shop.log et objets exclus. Une copie de toutes
+#                    les pages est gardée dans l'historique de SHInventoryPages juste avant.
+#   /rachat          (alias /buyback) Menu des ventes récentes : chaque objet vendu au shop peut être racheté pendant
+#                    buyback.duration-minutes au prix qu'il a rapporté. Clic : une pile ; shift + clic : tout.
+#   /rachat <joueur> Menu de rachat d'un joueur, en lecture seule (staff).
+#   /shsell reload   Recharge config.yml et messages.yml.
+#
+# Permissions :
+#   shsell.allpages   /sell allpages, avec shopguiplus.sell.all (tous par défaut)
+#   shsell.buyback    racheter ses ventes (tous par défaut)
+#   shsell.admin      /rachat <joueur> et /shsell reload (op par défaut)
+#
+# Les messages sont dans messages.yml. Les rachats sont écrits dans SHLogs (plugins/SHLogs/SHSell/).
+
+sell-allpages:
+  # Délai minimal entre deux /sell allpages d'un même joueur (ticks, 20 = 1 s)
+  cooldown-ticks: 40
+
+buyback:
+  # Durée pendant laquelle une vente reste rachetable (minutes) ; une nouvelle vente du même objet la repousse
+  duration-minutes: 60
+  # Ventes gardées par joueur (une par objet différent) ; au-delà, la moins chère part
+  max-entries: 45
+  # Objets jamais gardés au rachat (butin des fermes vendu en masse)
+  ignored:
+    - ROTTEN_FLESH
+    - BONE
+    - STRING
+    - SPIDER_EYE
+    - GUNPOWDER
+    - ARROW
+    - FEATHER
+    - EGG
+    - LEATHER
+    - RABBIT_HIDE
+    - PORKCHOP
+    - COOKED_PORKCHOP
+    - CHICKEN
+    - COOKED_CHICKEN
+    - BEEF
+    - COOKED_BEEF
+    - MUTTON
+    - COOKED_MUTTON
+    - RABBIT
+    - COOKED_RABBIT
+  # Son joué à chaque rachat : nom (ENTITY_EXPERIENCE_ORB_PICKUP) ou clé (minecraft:entity.experience_orb.pickup) ;
+  # "" = aucun son
+  sound: "minecraft:entity.experience_orb.pickup"
+  # Écriture de plugins/SHSell/rachats.yml quand il a changé (secondes)
+  save-seconds: 30
+
+# Affichage des sommes : motif Java DecimalFormat et langue des séparateurs (en : 1,088.5 ; fr : 1 088,5)
+price-format: "#,##0.##"
+number-locale: "en"
+
+# Lignes écrites dans SHLogs (plugins/SHLogs/SHSell/). file : nom du fichier ; format : ligne écrite.
+logs:
+  # Rachat d'objets vendus. Variables : %player%, %amount%, %item%, %price%.
+  buyback:
+    file: "rachats"
+    format: "%player% rachète %amount% %item% pour %price%"
