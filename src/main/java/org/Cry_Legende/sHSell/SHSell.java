@@ -11,6 +11,7 @@ import org.Cry_Legende.sHSell.shop.Economies;
 import org.Cry_Legende.sHSell.shop.SellAllPages;
 import org.Cry_Legende.sHSell.shop.SellCommandHook;
 import org.Cry_Legende.sHSell.shop.ShopBridge;
+import org.Cry_Legende.sHSell.util.ConfigFiles;
 import org.Cry_Legende.sHSell.util.Texts;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -20,6 +21,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,6 +42,9 @@ import java.util.logging.Level;
  */
 public final class SHSell extends JavaPlugin implements Listener {
 
+    private static final String RELOAD_PERMISSION = "shsell.admin.reload";
+    private static final String VIEW_PERMISSION = "shsell.admin.view";
+
     private final Texts texts = new Texts(this);
     private BuybackStore store;
     private BuybackMenus menus;
@@ -51,6 +56,7 @@ public final class SHSell extends JavaPlugin implements Listener {
     private DecimalFormat priceFormat;
     private DecimalFormat amountFormat;
     private BukkitTask hookRetry;
+    private BukkitTask saveTask;
 
     @Override
     public void onEnable() {
@@ -78,17 +84,24 @@ public final class SHSell extends JavaPlugin implements Listener {
 
         // Expiration et sauvegarde hors du thread principal ; comptes à rebours des menus sur le thread principal
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, store::purgeExpired, 20L * 20, 20L * 20);
-        long save = 20L * Math.max(5, getConfig().getInt("buyback.save-seconds", 30));
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, store::save, save, save);
+        scheduleSave();
         Bukkit.getScheduler().runTaskTimer(this, menus::refreshOpen, 20L, 20L);
     }
 
     @Override
     public void onDisable() {
         if (hookRetry != null) hookRetry.cancel();
+        if (saveTask != null) saveTask.cancel();
         if (sellHook != null) sellHook.uninstall();
         if (menus != null) menus.closeAll();
         if (store != null) store.save();
+    }
+
+    /** Sauvegarde de rachats.yml à l'intervalle de buyback.save-seconds (relancée par un reload). */
+    private void scheduleSave() {
+        if (saveTask != null) saveTask.cancel();
+        long save = 20L * Math.max(5, getConfig().getInt("buyback.save-seconds", 30));
+        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, store::save, save, save);
     }
 
     private void loadSettings() {
@@ -153,7 +166,7 @@ public final class SHSell extends JavaPlugin implements Listener {
         if (admin != null) {
             admin.setExecutor(this::onAdminCommand);
             admin.setTabCompleter((sender, command, alias, args) ->
-                args.length == 1 && sender.hasPermission("shsell.admin") && "reload".startsWith(args[0].toLowerCase(Locale.ROOT))
+                args.length == 1 && sender.hasPermission(RELOAD_PERMISSION) && "reload".startsWith(args[0].toLowerCase(Locale.ROOT))
                     ? List.of("reload") : List.of());
         }
     }
@@ -167,7 +180,7 @@ public final class SHSell extends JavaPlugin implements Listener {
             menus.open(player, player.getUniqueId(), player.getName(), false, 0);
             return true;
         }
-        if (!player.hasPermission("shsell.admin")) {
+        if (!player.hasPermission(VIEW_PERMISSION)) {
             texts.send(player, "no-permission");
             return true;
         }
@@ -184,7 +197,7 @@ public final class SHSell extends JavaPlugin implements Listener {
     }
 
     private List<String> onBuybackTab(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length != 1 || !sender.hasPermission("shsell.admin")) return List.of();
+        if (args.length != 1 || !sender.hasPermission(VIEW_PERMISSION)) return List.of();
         String prefix = args[0].toLowerCase(Locale.ROOT);
         return Bukkit.getOnlinePlayers().stream()
             .filter(p -> !(sender instanceof Player viewer) || viewer.canSee(p))
@@ -194,19 +207,37 @@ public final class SHSell extends JavaPlugin implements Listener {
     }
 
     private boolean onAdminCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.hasPermission("shsell.admin")) {
+        if (!sender.hasPermission(RELOAD_PERMISSION)) {
             texts.send(sender, "no-permission");
             return true;
         }
         if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-            reloadConfig();
-            texts.load();
-            loadSettings();
-            texts.send(sender, "reloaded");
+            reloadFiles(sender);
             return true;
         }
-        texts.send(sender, "admin-usage", "%label%", label);
+        texts.send(sender, "admin-usage", "%subcommands%", "reload");
         return true;
+    }
+
+    /**
+     * Relit config.yml et messages.yml. Les deux fichiers sont lus avant tout remplacement : si l'un est illisible,
+     * l'ancienne configuration reste active. rachats.yml n'est pas relu.
+     */
+    private void reloadFiles(CommandSender sender) {
+        YamlConfiguration loadedMessages;
+        try {
+            ConfigFiles.read(this, "config.yml");
+            loadedMessages = ConfigFiles.read(this, "messages.yml");
+        } catch (ConfigFiles.ReadError e) {
+            getLogger().severe("Reload annulé, " + e.file() + " illisible : " + e.detail());
+            texts.send(sender, "reload-error", "%file%", e.file(), "%error%", e.detail());
+            return;
+        }
+        reloadConfig();
+        texts.apply(loadedMessages);
+        loadSettings();
+        scheduleSave();
+        texts.send(sender, "reloaded", "%ignored%", String.valueOf(store.ignoredCount()));
     }
 
     // =========================================================================

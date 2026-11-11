@@ -7,12 +7,16 @@
 #   /rachat          (alias /buyback) Menu des ventes récentes : chaque objet vendu au shop peut être racheté pendant
 #                    buyback.duration-minutes au prix qu'il a rapporté. Clic : une pile ; shift + clic : tout.
 #   /rachat <joueur> Menu de rachat d'un joueur, en lecture seule (staff).
-#   /shsell reload   Recharge config.yml et messages.yml.
+#   /shsell reload   Recharge config.yml et messages.yml, et relance la sauvegarde de rachats.yml avec le nouvel
+#                    intervalle. Un fichier illisible annule le rechargement : l'ancienne configuration reste active
+#                    et le fichier fautif est indiqué. rachats.yml n'est pas relu.
 #
 # Permissions :
-#   shsell.allpages   /sell allpages, avec shopguiplus.sell.all (tous par défaut)
-#   shsell.buyback    racheter ses ventes (tous par défaut)
-#   shsell.admin      /rachat <joueur> et /shsell reload (op par défaut)
+#   shsell.allpages      /sell allpages, avec shopguiplus.sell.all (tous par défaut)
+#   shsell.buyback       racheter ses ventes (tous par défaut)
+#   shsell.admin         toute l'administration, parent des deux suivantes (op par défaut)
+#   shsell.admin.reload  /shsell reload (op par défaut)
+#   shsell.admin.view    /rachat <joueur> (op par défaut)
 #
 # Les messages sont dans messages.yml. Les rachats sont écrits dans SHLogs (plugins/SHLogs/SHSell/).
 

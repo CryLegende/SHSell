@@ -9,14 +9,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /** Messages de messages.yml (codes & et &#RRGGBB), envoyés en composants. */
 public final class Texts {
@@ -31,16 +25,22 @@ public final class Texts {
         this.plugin = plugin;
     }
 
-    /** messages.yml du dossier du plugin, complété par celui du jar pour les textes qui y manquent. */
+    /**
+     * messages.yml du dossier du plugin, complété par celui du jar pour les textes qui y manquent. Un fichier
+     * illisible n'empêche pas le démarrage : les textes du jar servent jusqu'au prochain reload.
+     */
     public void load() {
-        File file = new File(plugin.getDataFolder(), "messages.yml");
-        if (!file.exists()) plugin.saveResource("messages.yml", false);
-        messages = YamlConfiguration.loadConfiguration(file);
-        try (InputStream in = plugin.getResource("messages.yml")) {
-            if (in != null) messages.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8)));
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.WARNING, "messages.yml du jar illisible", e);
+        try {
+            messages = ConfigFiles.read(plugin, "messages.yml");
+        } catch (ConfigFiles.ReadError e) {
+            plugin.getLogger().severe(e.file() + " illisible, textes du jar utilisés : " + e.detail());
+            messages = ConfigFiles.bundled(plugin, "messages.yml");
         }
+    }
+
+    /** Remplace les textes par un messages.yml déjà lu sans erreur. */
+    public void apply(YamlConfiguration loaded) {
+        messages = loaded;
     }
 
     /** Texte brut (codes &) avec ses remplacements, par paires : raw("cle", "%a%", "1"). */

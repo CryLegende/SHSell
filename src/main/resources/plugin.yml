@@ -16,7 +16,7 @@ commands:
   shsell:
     description: Administration de SHSell.
     usage: /<command> reload
-    permission: shsell.admin
+    permission: shsell.admin.reload
 
 permissions:
   shsell.allpages:
@@ -26,5 +26,14 @@ permissions:
     description: Racheter ses propres ventes récentes.
     default: true
   shsell.admin:
-    description: Consulter le menu de rachat d'un joueur et recharger SHSell.
+    description: Toute l'administration de SHSell.
+    default: op
+    children:
+      shsell.admin.reload: true
+      shsell.admin.view: true
+  shsell.admin.reload:
+    description: Recharger config.yml et messages.yml (/shsell reload).
+    default: op
+  shsell.admin.view:
+    description: Consulter le menu de rachat d'un autre joueur (/rachat <joueur>).
     default: op

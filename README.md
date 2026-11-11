@@ -34,8 +34,8 @@ Utilisé sur : **Opale**.
 |---|---|---|---|
 | `/sell allpages` | | Vend l'inventaire porté et toutes les pages d'inventaire. | `shsell.allpages` et `shopguiplus.sell.all` |
 | `/rachat` | `/buyback` | Menu de rachat des ventes récentes. | `shsell.buyback` |
-| `/rachat <joueur>` | `/buyback` | Menu de rachat d'un joueur, en lecture seule. | `shsell.admin` |
-| `/shsell reload` | | Recharge config.yml et messages.yml. | `shsell.admin` |
+| `/rachat <joueur>` | `/buyback` | Menu de rachat d'un joueur, en lecture seule. | `shsell.admin.view` |
+| `/shsell reload` | | Recharge `config.yml` et `messages.yml` et relance la sauvegarde de `rachats.yml` avec le nouvel intervalle. Un fichier illisible annule le rechargement : l'ancienne configuration reste active et le fichier fautif est indiqué. | `shsell.admin.reload` |
 
 ## Permissions
 
@@ -43,7 +43,9 @@ Utilisé sur : **Opale**.
 |---|---|---|
 | `shsell.allpages` | /sell allpages (demande aussi shopguiplus.sell.all). | `true` |
 | `shsell.buyback` | Racheter ses propres ventes récentes. | `true` |
-| `shsell.admin` | Consulter le menu de rachat d'un joueur et recharger SHSell. | `op` |
+| `shsell.admin` | Toute l'administration (parent de `shsell.admin.reload` et `shsell.admin.view`). | `op` |
+| `shsell.admin.reload` | Recharger `config.yml` et `messages.yml` (`/shsell reload`). | `op` |
+| `shsell.admin.view` | Consulter le menu de rachat d'un autre joueur (`/rachat <joueur>`). | `op` |
 
 ## Configuration
 

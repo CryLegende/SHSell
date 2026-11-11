@@ -4,8 +4,12 @@
 player-only: "&7&l« &c&lSH &8&l» &7Cette commande est réservée aux &cjoueurs&7."
 no-permission: "&8&l« &f&lSH &8&l» &fCommande inconnue, essayer autre chose."
 player-unknown: "&7&l« &c&lSH &8&l» &7Le joueur &c%player% &7n'est jamais venu sur ce serveur."
-reloaded: "&7&l« &a&lSH &8&l» &7Configuration et messages &arechargés&7."
-admin-usage: "&7&l« &e&lSH &8&l» &7Utilisation : &e/%label% reload"
+# %ignored% = objets reconnus dans buyback.ignored
+reloaded: "&7&l« &a&lSH &8&l» &7Configuration et messages &arechargés&7 (&a%ignored% &7objets ignorés au rachat)."
+# %file% = fichier illisible, %error% = cause
+reload-error: "&7&l« &c&lSH &8&l» &cRechargement annulé&7, l'ancienne configuration reste active. &f%file% &7: &c%error%"
+# %subcommands% = sous-commandes que l'expéditeur peut utiliser
+admin-usage: "&7&l« &e&lSH &8&l» &7Utilisation : &e/shsell <%subcommands%>&7."
 
 # Sommes : %amount% (nombre formaté), %currency% (nom de la monnaie de la boutique ; DEFAULT = monnaie par défaut de
 # ShopGUIPlus, la première de economyTypes)

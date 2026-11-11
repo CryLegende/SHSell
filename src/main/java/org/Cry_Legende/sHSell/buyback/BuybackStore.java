@@ -49,6 +49,11 @@ public final class BuybackStore {
         this.file = new File(plugin.getDataFolder(), "rachats.yml");
     }
 
+    /** Nombre d'objets de buyback.ignored reconnus. */
+    public int ignoredCount() {
+        return ignored.size();
+    }
+
     public void reloadSettings() {
         FileConfiguration config = plugin.getConfig();
         durationMillis = TimeUnit.MINUTES.toMillis(Math.max(1, config.getInt("buyback.duration-minutes", 60)));
