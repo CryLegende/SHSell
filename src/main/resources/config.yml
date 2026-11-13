@@ -34,23 +34,6 @@ buyback:
     - ROTTEN_FLESH
     - BONE
     - STRING
-    - SPIDER_EYE
-    - GUNPOWDER
-    - ARROW
-    - FEATHER
-    - EGG
-    - LEATHER
-    - RABBIT_HIDE
-    - PORKCHOP
-    - COOKED_PORKCHOP
-    - CHICKEN
-    - COOKED_CHICKEN
-    - BEEF
-    - COOKED_BEEF
-    - MUTTON
-    - COOKED_MUTTON
-    - RABBIT
-    - COOKED_RABBIT
   # Son joué à chaque rachat : nom (ENTITY_EXPERIENCE_ORB_PICKUP) ou clé (minecraft:entity.experience_orb.pickup) ;
   # "" = aucun son
   sound: "minecraft:entity.experience_orb.pickup"
